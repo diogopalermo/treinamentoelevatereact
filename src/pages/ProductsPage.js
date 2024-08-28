@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ProductCard from "../components/ProductCard";
 import ErrorBoundary from "../components/ErrorBoundary";
 import BuggyCounter from "../components/BuggyCounter";
+import ErrorFallback from "../components/ErrorFallback";
+import ComponentThatMayError from "../components/ComponentThatMayError";
 
 const ProductGrid = styled.div`
   display: flex;
@@ -49,8 +51,9 @@ const ProductsPage = () => {
       </div>
       <div>
         <h1>Teste de Error Boundary</h1>
-        <ErrorBoundary>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
           <BuggyCounter />
+          <ComponentThatMayError />
         </ErrorBoundary>
       </div>
     </div>
