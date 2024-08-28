@@ -1,8 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import ProductCard from "../components/ProductCard";
-import ErrorBoundary from "../components/ErrorBoundary";
-import BuggyCounter from "../components/BuggyCounter";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import ProductCard from '../components/ProductCard';
+import { getProducts } from '../services/ProductServices';
 
 const ProductGrid = styled.div`
   display: flex;
@@ -11,48 +10,36 @@ const ProductGrid = styled.div`
 `;
 
 const ProductsPage = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Smartphone",
-      price: 699.99,
-      category: "Eletrônicos",
-      imageUrl: "https://example.com/smartphone.jpg",
-    },
-    {
-      id: 2,
-      name: "Laptop",
-      price: 1299.99,
-      category: "Eletrônicos",
-      imageUrl: "https://example.com/laptop.jpg",
-    },
-    {
-      id: 3,
-      name: "Camiseta",
-      price: 29.99,
-      category: "Roupas",
-      imageUrl: "https://example.com/tshirt.jpg",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getProducts();
+        setProducts(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Falha ao carregar produtos');
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <div>Carregando...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
-      <div>
-        <h1>Nossos Produtos</h1>
-        <ErrorBoundary>
-          <ProductGrid>
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </ProductGrid>
-        </ErrorBoundary>
-      </div>
-      <div>
-        <h1>Teste de Error Boundary</h1>
-        <ErrorBoundary>
-          <BuggyCounter />
-        </ErrorBoundary>
-      </div>
+      <h1>Nossos Produtos</h1>
+      <ProductGrid>
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </ProductGrid>
     </div>
   );
 };
