@@ -1,10 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import ProductCard from "../components/ProductCard";
-import ErrorBoundary from "../components/ErrorBoundary";
-import BuggyCounter from "../components/BuggyCounter";
-import ErrorFallback from "../components/ErrorFallback";
-import ComponentThatMayError from "../components/ComponentThatMayError";
+import React from 'react';
+import styled from 'styled-components';
+import ProductCard from '../components/ProductCard';
+import StyledButton from '../components/StyledButton';
+import { useProducts } from '../context/ProductContext';
 
 const ProductGrid = styled.div`
   display: flex;
@@ -13,49 +11,20 @@ const ProductGrid = styled.div`
 `;
 
 const ProductsPage = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Smartphone",
-      price: 699.99,
-      category: "Eletrônicos",
-      imageUrl: "https://example.com/smartphone.jpg",
-    },
-    {
-      id: 2,
-      name: "Laptop",
-      price: 1299.99,
-      category: "Eletrônicos",
-      imageUrl: "https://example.com/laptop.jpg",
-    },
-    {
-      id: 3,
-      name: "Camiseta",
-      price: 29.99,
-      category: "Roupas",
-      imageUrl: "https://example.com/tshirt.jpg",
-    },
-  ];
+  const { products, loading, error } = useProducts();
+
+  if (loading) return <div>Carregando...</div>;
+  if (error) return <div>ERROR{error}</div>;
 
   return (
     <div>
-      <div>
-        <h1>Nossos Produtos</h1>
-        <ErrorBoundary>
-          <ProductGrid>
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </ProductGrid>
-        </ErrorBoundary>
-      </div>
-      <div>
-        <h1>Teste de Error Boundary</h1>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <BuggyCounter />
-          <ComponentThatMayError />
-        </ErrorBoundary>
-      </div>
+      <h1>Nossos Produtos</h1>
+      <StyledButton primary to="/products/new">Novo Produto</StyledButton>
+      <ProductGrid>
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </ProductGrid>
     </div>
   );
 };

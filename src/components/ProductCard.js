@@ -54,9 +54,9 @@ const ProductCard = ({ product }) => {
   return (
     <Card>
       <ProductImage src={product.imageUrl} alt={product.name} />
-      <ProductName>{product.name}</ProductName>
-      <ProductPrice>R${product.price.toFixed(2)}</ProductPrice>
-      <ProductCategory>{product.category}</ProductCategory>
+      <ProductName>{product.nome}</ProductName>
+      <ProductPrice>R${product.preco.toFixed(2)}</ProductPrice>
+      <ProductCategory>{product.categoria.descricao}</ProductCategory>
       <ViewDetailsButton to={`/product/${product.id}`}>
         Ver Detalhes
       </ViewDetailsButton>
